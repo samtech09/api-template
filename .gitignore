@@ -1,0 +1,39 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# any ssh keys and certificates
+*.pem
+*.key
+*.ppk
+
+# tokens
+*.token
+
+# our custom go binary and releases
+*.bin
+bin
+*.cmd
+cmd
+releases
+secured
+
+# exlude shell scripts
+*.sh
+
+# test and prod json
+*.test.json
+*.prod.json
+
+log*
+tool
+tools

@@ -1,0 +1,1 @@
+{"UserCreate":"F|insert into dbusers(id, name) values($1, $2) returning id;","UserUpdate":"F|update dbusers set name=$1 where (id=$2);","UserDelete":"F|delete from dbusers where (id=$1);","UserListAll":"T|select id, name, count(*) over() as rowcount from dbusers;"}
