@@ -1,13 +1,15 @@
 package main
 
 import (
+	"os"
+	
 	sb "github.com/samtech09/gosql"
 )
 
 func main() {
 	fw := sb.NewFileWriter(5)
     
-    os.Setenv("SQL_PARAM_FORMAT", ParamPostgreSQL)
+    os.Setenv("SQL_PARAM_FORMAT", sb.ParamPostgreSQL)
 
 	stmt := sb.InsertBuilder().Table("dbusers").
 		Columns("id", "name").Returning("id").
