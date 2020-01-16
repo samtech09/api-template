@@ -30,6 +30,9 @@ do
 	sed -i "s/github.com\/samtech09\/api-template/${1}/g" "$f"
 done
 
+#mod file
+sed -i "s/github.com\/samtech09\/api-template/${1}/g" "go.mod"
+
 #replace in Makefile
 pname=`basename ${1}`
 sed -i "s/api-template/${pname}/g" "api-template/Makefile"

@@ -31,7 +31,9 @@ secured
 *.test.json
 *.prod.json
 
-log*
+*.log
+log
+logs
 tool
 tools
 *.self
