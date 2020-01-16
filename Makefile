@@ -43,14 +43,14 @@ build: clean
 ## run: build and run application
 run: build
 	@cp conf.dev.json $(BINPATH)/
-	@cp public.pem $(BINPATH)/
+	#@cp public.pem $(BINPATH)/
 	@mkdir $(BINPATH)/sqls || true
 	@cp sqls/sqlbuilder.json $(BINPATH)/sqls
-	@cd ${BINPATH} && ./${EXENAME}
+	@cd ${BINPATH} && export TESTENV=1 && ./${EXENAME}
 
 
 .PHONY: test
-## test: run unit test for given controller, pass name of comtroller as c=controllername e.g. c=user
+## test: run unit test for given controller, pass name of comtroller as c=controllername e.g. make c=user test
 test:
 	@echo Controller is $(c)
 	@cd tests/$(c)tests && go test

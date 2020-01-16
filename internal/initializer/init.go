@@ -57,6 +57,11 @@ func Initconfig(prod *bool, confFolderPath string) {
 		}
 	}
 	g.Config = appConfig
+
+	// check if it is test environment
+	if os.Getenv("TESTENV") == "1" {
+		g.TestEnv = true
+	}
 }
 
 // InitServices initializes connections / sessions with different services
@@ -77,8 +82,10 @@ func InitServices(appDir string) {
 	//
 	// initialize JWT Validator
 	//
-
-	g.JWTval = jwtauth.InitValidator(g.Config.JwtAuthConfig, appDir+"/public.pem")
+	// Do not check tokens while unit testing
+	if !g.TestEnv {
+		g.JWTval = jwtauth.InitValidator(g.Config.JwtAuthConfig, appDir+"/public.pem")
+	}
 
 	//
 	//initialize Api

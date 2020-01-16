@@ -23,6 +23,7 @@ var (
 	IsProduction bool
 
 	//TestEnv tell if running in Test mode for unit testing
+	//Set environment variable TESTENV=1 to set it
 	TestEnv bool
 
 	//MyURL is this sever's own URL e.g. https://mshopapi.mahendras.org.org etc

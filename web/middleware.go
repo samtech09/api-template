@@ -25,7 +25,7 @@ func AuthRequired() func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-			// Check tokens only in production
+			// Do not check tokens while unit testing
 			if g.TestEnv {
 				next.ServeHTTP(w, r)
 				return
