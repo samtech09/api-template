@@ -19,6 +19,9 @@ then
   exit
 fi
 
+#clone repo
+git clone https://github.com/samtech09/api-template.git
+
 # find given file type in current folder and all sub folders
 for f in $(find -iname "*.go")
 do 
