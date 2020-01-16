@@ -82,7 +82,7 @@ func InitServices(appDir string) {
 	//
 	// initialize JWT Validator
 	//
-	// Do not check tokens while unit testing
+	//    Do not check tokens while unit testing
 	if !g.TestEnv {
 		g.JWTval = jwtauth.InitValidator(g.Config.JwtAuthConfig, appDir+"/public.pem")
 	}

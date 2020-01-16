@@ -43,7 +43,6 @@ build: clean
 ## run: build and run application
 run: build
 	@cp conf.dev.json $(BINPATH)/
-	#@cp public.pem $(BINPATH)/
 	@mkdir $(BINPATH)/sqls || true
 	@cp sqls/sqlbuilder.json $(BINPATH)/sqls
 	@cd ${BINPATH} && export TESTENV=1 && ./${EXENAME}
