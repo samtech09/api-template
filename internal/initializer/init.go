@@ -1,12 +1,12 @@
 package initializer
 
 import (
+	"encoding/json"
 	"log"
 	"net"
 	"os"
 	"path/filepath"
 
-	c "github.com/samtech09/api-template/config"
 	g "github.com/samtech09/api-template/global"
 	"github.com/samtech09/api-template/internal/logger"
 	"github.com/samtech09/api-template/psql"
@@ -20,26 +20,65 @@ import (
 
 var logFile *os.File
 
+//Initconfig read config file and initialize AppConfig struct
+func Initconfig(prod *bool, confFolderPath string) {
+	//set if productin mode is true
+	g.IsProduction = *prod
+
+	conffile := confFolderPath + "conf.dev.json"
+	if g.IsProduction {
+		// fmt.Println("****************************************")
+		// fmt.Println("*** Loading PRODUCTION configuration ***")
+		// fmt.Println("****************************************")
+		conffile = confFolderPath + "conf.prod.json"
+	}
+
+	file, err := os.Open(conffile)
+	if err != nil {
+		log.Fatal("Missing config file.\n", err)
+	}
+
+	defer file.Close()
+
+	decoder := json.NewDecoder(file)
+	appConfig := g.NewConfig()
+	err = decoder.Decode(&appConfig)
+	if err != nil {
+		log.Fatal("Cannot parse config.\n", err)
+	}
+
+	if g.IsProduction {
+		appConfig.MyURL = "https://" + appConfig.MyDomain
+	} else {
+		if appConfig.DisableSSL {
+			appConfig.MyURL = "http://" + appConfig.MyDomain
+		} else {
+			appConfig.MyURL = "https://" + appConfig.MyDomain
+		}
+	}
+	g.Config = appConfig
+}
+
 // InitServices initializes connections / sessions with different services
 func InitServices(appDir string) {
 	// get IP address of outbound interface
-	g.MyIP = getOutboundIP(c.AppConfig.PingIP)
+	g.MyIP = getOutboundIP(g.Config.PingIP)
 
 	//
 	// inititalize route cache
 	//
-	g.Mgosesion = apiroutecache.InitSession(c.AppConfig.Mongo)
+	g.Mgosesion = apiroutecache.InitSession(g.Config.Mongo)
 
 	//
 	// inititalize data cache
 	//
-	g.Cache = redicache.InitSession(c.AppConfig.Redis)
+	g.Cache = redicache.InitSession(g.Config.Redis)
 
 	//
 	// initialize JWT Validator
 	//
 
-	g.JWTval = jwtauth.InitValidator(c.AppConfig.JwtAuthConfig, appDir+"/public.pem")
+	g.JWTval = jwtauth.InitValidator(g.Config.JwtAuthConfig, appDir+"/public.pem")
 
 	//
 	//initialize Api
@@ -50,7 +89,7 @@ func InitServices(appDir string) {
 	// ----------------------
 	// Initialize db connections
 	//
-	g.Db = psql.InitDbPool(c.AppConfig.DBReader, c.AppConfig.DBWriter, *g.Logger)
+	g.Db = psql.InitDbPool(g.Config.DBReader, g.Config.DBWriter, *g.Logger)
 
 	//
 	// setup models for caching
@@ -69,7 +108,7 @@ func InitLogger(appDir string) {
 	logerror := true
 	logdebug := false
 
-	switch c.AppConfig.LogLevel {
+	switch g.Config.LogLevel {
 	case "fatal":
 		logerror = false
 		loginfo = false
@@ -88,16 +127,25 @@ func InitLogger(appDir string) {
 		logdebug = true
 	}
 
-	g.Logger = logger.New(logerror, loginfo, logdebug)
+	g.Logger = logger.New(logerror, loginfo, logdebug, true)
 
 	// set output to file
 	//create logs directory if not exist
 	newpath := filepath.Join(appDir, "logs")
+	logpath := filepath.Join(newpath, "app.log")
 	os.Mkdir(newpath, os.ModePerm)
 	var err error
-	logFile, err = os.Open(filepath.Join(newpath, "app.log"))
-	if err != nil {
-		g.Logger.Fatal().Err(err).Msg("Log file open error")
+	// check log file exist, if not then create
+	if _, err = os.Stat(logpath); os.IsNotExist(err) {
+		logFile, err = os.Create(logpath)
+		if err != nil {
+			g.Logger.Fatal().Err(err).Msg("log file create error")
+		}
+	} else {
+		logFile, err = os.Open(logpath)
+		if err != nil {
+			g.Logger.Fatal().Err(err).Msg("log file open error")
+		}
 	}
 
 	g.Logger.Output(logFile)

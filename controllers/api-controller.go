@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strings"
 
-	config "github.com/samtech09/api-template/config"
 	g "github.com/samtech09/api-template/global"
 	"github.com/samtech09/api-template/web"
 	"github.com/samtech09/jwtauth"
@@ -42,10 +41,17 @@ func NewAPIController(c interface{}, name string, v *web.APIVersion) *APIControl
 }
 
 //GetClientInfo retrieve clientinfo from context of authentiated requests only
-func (b *APIController) GetClientInfo(r *http.Request) jwtauth.ClientInfo {
+func (b *APIController) GetClientInfo(r *http.Request, callerName string) jwtauth.ClientInfo {
+	// check request has Auth header, otherwise there will be not client info
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		g.Logger.Error().Str("Fn", callerName).Msg("GetClientInfo called for request without authorization header")
+		return jwtauth.ClientInfo{}
+	}
+
 	ac := r.Context().Value(web.KeyAppContext)
 	if ac == nil {
-		g.Logger.Error().Msg("Unable to get application context")
+		g.Logger.Error().Str("Fn", callerName).Msg("GetClientInfo failed to get application context")
 		return jwtauth.ClientInfo{}
 	}
 	return ac.(jwtauth.ClientInfo)
@@ -55,33 +61,40 @@ func (b *APIController) GetClientInfo(r *http.Request) jwtauth.ClientInfo {
 // ---------------
 //
 
-//JSON set resultant data into response that is later server as JSON using AppContexter middleware
+//JSON set resultant data into response that is injected into Data property of APiResult as JSONString
 func (b *APIController) JSON(w http.ResponseWriter, data interface{}) {
 	jsondata, _ := toJSON(data)
 
-	g.Logger.Debug().Str("data", jsondata).Msg("api-controller/JSON")
+	g.Logger.Debug().Str("data", jsondata).
+		Msg("api-controller/JSON")
+
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(web.NewResultFilled(jsondata, http.StatusOK, 0, ""))
 }
 
-//JSONString set resultant data into response that is later server as JSON using AppContexter middleware
-func (b *APIController) JSONString(w http.ResponseWriter, jsondata string) {
-	g.Logger.Debug().Str("data", jsondata).Msg("api-controller/JSONString")
+//JSONStr set resultant data into response that is injected into Data property of APiResult as-it-is without any conversion
+func (b *APIController) JSONStr(w http.ResponseWriter, jsondata string) {
+	g.Logger.Debug().Str("data", jsondata).Msg("api-controller/JSONStr")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(web.NewResultFilled(jsondata, http.StatusOK, 0, ""))
 }
 
-//ResultReplacer set resultant data into response that is later server as JSON using AppContexter middleware
-// It also replace given string in serialized json
-func (b *APIController) ResultReplacer(w http.ResponseWriter, data interface{}, find, replace string) {
+//JSONRaw set resultant data as JSON of passed data itself. Data not encapsulated in APiResult.
+//Use with caution as called must know what data it will return for parsing.
+func (b *APIController) JSONRaw(w http.ResponseWriter, data interface{}) {
+	g.Logger.Debug().Str("data", "raw-data").Msg("api-controller/JSONRaw")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(data)
+}
+
+//JSONReplacer set resultant data into response APIResult, but before sending response,
+//it makes replacements in JSONString of data as per supplied replacers
+func (b *APIController) JSONReplacer(w http.ResponseWriter, data interface{}, r *strings.Replacer) {
 	jsondata, _ := toJSON(data)
-	str := strings.Replace(jsondata, find, replace, -1)
+	jsondata = r.Replace(jsondata)
 
-	g.Logger.Debug().Str("data", jsondata).Str("find", find).
-		Str("replacewith", replace).
-		Msg("api-controller/ResultReplacer")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(web.NewResultFilled(str, http.StatusOK, 0, ""))
+	json.NewEncoder(w).Encode(web.NewResultFilled(jsondata, http.StatusOK, 0, ""))
 }
 
 //Content writes given string to response
@@ -90,20 +103,26 @@ func (b *APIController) Content(w http.ResponseWriter, content string) {
 	fmt.Fprintf(w, content)
 }
 
-//Error set error into response that is later served as JSON using AppContexter middleware
-func (b *APIController) Error(w http.ResponseWriter, err string, code int, funcName string) {
-	if !config.IsProduction {
-		//Print err for debug
-		g.Logger.Error().Str("Function", funcName).Msg(err)
-	}
-
+//Error set error into response that is later served as JSON
+func (b *APIController) Error(w http.ResponseWriter, err string, code int, callerName string) {
+	g.Logger.Error().Str("Fn", callerName).Msg(err)
 	w.WriteHeader(code)
 	json.NewEncoder(w).Encode(web.NewResultFilled("", code, 1, err))
 }
 
 //Error500 return 500-internal server error
-func (b *APIController) Error500(w http.ResponseWriter, err string, funcName string) {
-	b.Error(w, err, http.StatusInternalServerError, funcName)
+func (b *APIController) Error500(w http.ResponseWriter, err string, callerName string) {
+	// pc, _, _, ok := runtime.Caller(1)
+	// fn := runtime.FuncForPC(pc)
+	// if ok && fn != nil {
+	// 	dotName := filepath.Ext(fn.Name())
+	// 	fnName := strings.TrimLeft(dotName, ".") + "()"
+	// 	fmt.Println("Function: ", fnName)
+	// }
+
+	g.Logger.Error().Str("Fn", callerName).Msg(err)
+	w.WriteHeader(http.StatusInternalServerError)
+	json.NewEncoder(w).Encode(web.NewResultFilled("", http.StatusInternalServerError, 1, err))
 }
 
 //BindJSON binds request body to JSON

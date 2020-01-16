@@ -2,14 +2,14 @@ package web
 
 import (
 	"log"
-	c "github.com/samtech09/api-template/config"
-	g "github.com/samtech09/api-template/global"
 	"net"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	g "github.com/samtech09/api-template/global"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -39,18 +39,18 @@ func NewServer() *Server {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
-	if c.AppConfig.DisableGzip == false {
+	if g.Config.DisableGzip == false {
 		r.Use(middleware.DefaultCompress)
 	}
 
 	// Log all requests to this file
-	f, _ := os.Create("logs/app.log")
+	f, _ := os.Create("logs/requests.log")
 	//DefaultLogger = RequestLogger(&DefaultLogFormatter{Logger: log.New(os.Stdout, "", log.LstdFlags), NoColor: false})
 	middleware.DefaultLogger = middleware.RequestLogger(&middleware.DefaultLogFormatter{Logger: log.New(f, "", log.LstdFlags), NoColor: true})
 
 	// create http server with custom config
 	httpSrv := http.Server{
-		Addr:         ":" + strconv.Itoa(c.AppConfig.ListenPort),
+		Addr:         ":" + strconv.Itoa(g.Config.ListenPort),
 		Handler:      r, // < here Chi is attached to the HTTP server
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 5 * time.Minute,
@@ -80,7 +80,7 @@ func (s *Server) Start() {
 
 func (s *Server) listenAndServeEx(addr string) {
 	network := "tcp4"
-	addr = addr + ":" + strconv.Itoa(c.AppConfig.ListenPort)
+	addr = addr + ":" + strconv.Itoa(g.Config.ListenPort)
 
 	// if addres is enclosed in square brackets then it is IPv6 address
 	if strings.HasPrefix(addr, "[") {
@@ -91,7 +91,7 @@ func (s *Server) listenAndServeEx(addr string) {
 		log.Fatal("ListenEx: ", err)
 	}
 
-	if c.AppConfig.DisableSSL {
+	if g.Config.DisableSSL {
 		// start serving
 		err := s.Serve(l)
 		if err != nil {
@@ -99,7 +99,7 @@ func (s *Server) listenAndServeEx(addr string) {
 		}
 	} else {
 		// start serving with TLS
-		err := s.ServeTLS(l, c.AppConfig.SSLCertFile, c.AppConfig.SSLKeyFile)
+		err := s.ServeTLS(l, g.Config.SSLCertFile, g.Config.SSLKeyFile)
 		if err != nil {
 			log.Fatal("ServeExTLS: ", err)
 		}

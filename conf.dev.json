@@ -1,5 +1,5 @@
 {
-    "ListenPort": 8050,
+    "ListenPort": 8080,
     "PingIP": "8.8.8.8:80",
     "DisableGzip": true,
 
@@ -7,7 +7,7 @@
     "SSLCertFile": "",
     "SSLKeyFile": "",
 
-    "MibsApiBaseUrl": "http://74.124.24.16/mibsws/api/",
+    "ExtApiBaseUrl": "http://localhost/ext/api/",
 
     "DBReader": {
         "PDbHost": "192.168.60.206",
@@ -58,7 +58,7 @@
 
     "JwtAuthConfig": {
         "JWTIssuer": "mahendras-auth-srv01",
-        "JWTAudience": "http://localhost:8050",
+        "JWTAudience": "http://localhost:8080",
         "JWTTimeSkew": 2
     },
 

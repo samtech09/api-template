@@ -39,6 +39,22 @@ build: clean
 	@echo 'Build suceeded... done'
 
 
+.PHONY: run
+## run: build and run application
+run: build
+	@cp conf.dev.json $(BINPATH)/
+	@cp public.pem $(BINPATH)/
+	@mkdir $(BINPATH)/sqls || true
+	@cp sqls/sqlbuilder.json $(BINPATH)/sqls
+	@cd ${BINPATH} && ./${EXENAME}
+
+
+.PHONY: test
+## test: run unit test for given controller, pass name of comtroller as c=controllername e.g. c=user
+test:
+	@echo Controller is $(c)
+	@cd tests/$(c)tests && go test
+
 
 --release: build
 	@echo 'Releasing new version ${APP_VER} ...'

@@ -51,7 +51,6 @@ github.com/jackc/pgtype v0.0.0-20190824184912-ab885b375b90/go.mod h1:KcahbBH1nCM
 github.com/jackc/pgtype v0.0.0-20190828014616-a8802b16cc59/go.mod h1:MWlu30kVJrUS8lot6TQqcg7mtthZ9T0EoIBFiJcmcyw=
 github.com/jackc/pgtype v1.1.0 h1:aZwrtaSe314VgSGmKvggULa2TavoD1jWVsxj9Zdltek=
 github.com/jackc/pgtype v1.1.0/go.mod h1:5m2OfMh1wTK7x+Fk952IDmI4nw3nPrvtQdM0ZT4WpC0=
-github.com/jackc/pgx v3.6.1+incompatible h1:qKBkTh0LCxZL+wCqXDqPpqlqbSUWFKtyirpYC/1nXqI=
 github.com/jackc/pgx/v4 v4.0.0-20190420224344-cc3461e65d96/go.mod h1:mdxmSJJuR08CZQyj1PVQBHy9XOp5p8/SHH6a0psbY9Y=
 github.com/jackc/pgx/v4 v4.0.0-20190421002000-1b8f0016e912/go.mod h1:no/Y67Jkk/9WuGR0JG/JseM9irFbnEPbuWV2EELPNuM=
 github.com/jackc/pgx/v4 v4.0.0-pre1.0.20190824185557-6972a5742186/go.mod h1:X+GQnOEnf1dqHGpw7JmHqHc1NxDoalibchSk9/RWuDc=
@@ -112,8 +111,6 @@ github.com/samtech09/apiroutecache v1.0.0 h1:mqOidwOHDX/dlmgvJdF/hKNvlrlFJJAB8yu
 github.com/samtech09/apiroutecache v1.0.0/go.mod h1:k1BWOuajrQP46kfT+iBANeC9mMLI2EIlgjQT75/zmRU=
 github.com/samtech09/apitestengine v0.0.0-20200108132032-c1f4ae23280e h1:d7guu+Mc8AGslF9cEDpuEJ8lNaLe3As6ZklFTc5IH2c=
 github.com/samtech09/apitestengine v0.0.0-20200108132032-c1f4ae23280e/go.mod h1:AVI7mdYkYyfpd7Ejjq/GH9OOPfIXNmj9mDqIkLswB3I=
-github.com/samtech09/gosql v1.0.0 h1:yB4zndu2Yet7Gnev64qr/DePoiPZaCb6sNFkFKd/I5Y=
-github.com/samtech09/gosql v1.0.0/go.mod h1:2OoKAG5iSsyfRW9x7rOPLhftQArn2O1DGXj8a/4vJvk=
 github.com/samtech09/gosql v1.0.1 h1:K/5WTyCJuHOfpLenEPW6L6V4H+HoCpkDVltIlfmVXNo=
 github.com/samtech09/gosql v1.0.1/go.mod h1:2OoKAG5iSsyfRW9x7rOPLhftQArn2O1DGXj8a/4vJvk=
 github.com/samtech09/jwtauth v1.0.0 h1:LC0LZpWUbzDtx2bFO0PCSAEDswDww6MUI5jf/PcBCNc=

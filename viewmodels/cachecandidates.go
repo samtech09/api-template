@@ -1,9 +1,9 @@
 package viewmodels
 
 import (
-	c "github.com/samtech09/api-template/config"
-	g "github.com/samtech09/api-template/global"
 	"time"
+
+	g "github.com/samtech09/api-template/global"
 )
 
 //RegisterModelsForCaching register models to be cached in Redis Cache
@@ -31,5 +31,5 @@ func (s DbUser) GetMasterKey() string {
 
 //GetExpiration returns expiration duration of key
 func (s DbUser) GetExpiration() time.Duration {
-	return time.Minute * time.Duration(c.AppConfig.Redis.ExpirationInMinute)
+	return time.Minute * time.Duration(g.Config.Redis.ExpirationInMinute)
 }

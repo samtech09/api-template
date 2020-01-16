@@ -6,7 +6,6 @@ import (
 	"github.com/samtech09/api-template/internal/initializer"
 	"github.com/samtech09/api-template/internal/logger"
 
-	c "github.com/samtech09/api-template/config"
 	g "github.com/samtech09/api-template/global"
 )
 
@@ -22,7 +21,7 @@ func InitTestConfig() {
 
 	//initialize config
 	prod := false
-	c.Initconfig(&prod, "../../")
+	initializer.Initconfig(&prod, "../../")
 
 	//-------
 	//------------
@@ -35,7 +34,7 @@ func InitTestConfig() {
 	//---------------------
 
 	//initialize logs
-	g.Logger = logger.NewConsole(true, true, true)
+	g.Logger = logger.NewConsole(true, true, true, true)
 
 	// dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	// if err != nil {

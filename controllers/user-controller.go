@@ -14,21 +14,22 @@ import (
 	"github.com/go-chi/chi"
 )
 
+//
+//#region base initialization
+
 //User is type for UserController
 type User struct {
 	*APIController
 }
 
 // New creates New UserController and initialize it with BaseController
-func (t *User) New(v *web.APIVersion) http.Handler {
+func (t *User) New(v *web.APIVersion) {
 	ac := NewAPIController(t, "users", v)
 
 	//Create mount and add routes
 	v.Router.Mount("/users", t.SetRoutes())
 
 	t.APIController = ac
-
-	return v.Router
 }
 
 //SetRoutes create routes for controller
@@ -48,6 +49,9 @@ func (t *User) SetRoutes() http.Handler {
 	})
 	return r
 }
+
+//#endregion
+//
 
 //Listusers will list all users
 func (t *User) Listusers(w http.ResponseWriter, r *http.Request) {
