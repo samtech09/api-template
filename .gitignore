@@ -27,9 +27,6 @@ cmd
 releases
 secured
 
-# exlude shell scripts
-*.sh
-
 # test and prod json
 *.test.json
 *.prod.json
