@@ -10,7 +10,7 @@
     "ExtApiBaseUrl": "http://localhost/ext/api/",
 
     "DBReader": {
-        "PDbHost": "192.168.60.206",
+        "PDbHost": "localhost",
         "PDbPort": 5432,
         "PDbName": "testdb",
         "PDbUser": "testuser",
@@ -20,7 +20,7 @@
     },
 
     "DBWriter": {
-        "PDbHost": "192.168.60.206",
+        "PDbHost": "localhost",
         "PDbPort": 5432,
         "PDbName": "testdb",
         "PDbUser": "testuser",
@@ -30,8 +30,8 @@
     },
 
     "AuthSrv": {
-        "AuthServerURL": "http://localhost:8090/authapi/",
-        "AuthServerVendorID": "42d52cc9-ac4e-48ad-b01b-3afd0311e1a4",
+        "AuthServerURL": "http://url-to-auth-server/",
+        "AuthServerVendorID": "vendor-id",
         "AuthTokenEndPoint": "token",
         "AuthRefreshTokenEndPoint": "refresh",
         "AuthRevokeEndPoint": "revoke",
@@ -39,29 +39,29 @@
     },
 
     "Mongo": {
-        "Host": "192.168.60.206",
+        "Host": "localhost",
         "Port": 27017,
-        "DbName": "ostroutes",
+        "DbName": "apiroutes",
         "User": "",
         "Pwd": "",
         "ConnTimeout": 20
     },
 
     "Redis": {
-        "Host": "192.168.60.206",
+        "Host": "localhost",
         "Port": 6379,
         "DB": 2,
         "Pwd": "",
-        "KeyPrefix": "mshop:",
+        "KeyPrefix": "myapp:",
         "ExpirationInMinute": 180
     },
 
     "JwtAuthConfig": {
-        "JWTIssuer": "mahendras-auth-srv01",
+        "JWTIssuer": "auth-srvr-issuewer",
         "JWTAudience": "http://localhost:8080",
         "JWTTimeSkew": 2
     },
 
-    "MyDomain": "192.168.60.206",
+    "MyDomain": "localhost",
     "LogLevel": "info"
 }

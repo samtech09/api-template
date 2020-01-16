@@ -8,7 +8,6 @@ EXENAME=api-template
 BINPATH=$(BUILDPATH)/cmd
 PUBLISHFOLDER=$(BUILDPATH)/releases
 PUBLISHPATH=$(PUBLISHFOLDER)/$(APP_VER)
-SCRIPTPATH=`echo ${GOPATH}/src/mahendras/scripts`
 #APP_BRANCH := $(shell git branch | grep '*')
 #DEP_BRANCH := $(shell cd ../stapi/models ; git branch | grep '*')
 
@@ -81,9 +80,7 @@ test:
 deploy-test: build
 	@cp conf.test.json $(BINPATH)/conf.dev.json
 	@7z a $(BINPATH)/${EXENAME}.zip $(BINPATH)/$(EXENAME) $(BINPATH)/conf.dev.json
-	#scp $(BINPATH)/${EXENAME}.zip linode-st:~/goapps/temp/
-	#@sh $(SCRIPTPATH)/deploy-app.sh "${EXENAME}"
-	echo "Package deployed to staging"
+	echo "Package ready to deploy to staging"
 
 
 
@@ -92,11 +89,7 @@ deploy-test: build
 deploy-prod: --release --prepfiles-for-package
 	# create zip file
 	@7z a $(PUBLISHPATH)/${EXENAME}.zip $(PUBLISHPATH)/$(EXENAME) $(PUBLISHPATH)/conf.prod.json
-	@echo Uploading...
-	# #rename old app.zip to app_v1.2.3.zip at s3
-	# @aws s3 mv s3://mepl-goapps/${EXENAME}.zip s3://mepl-goapps/${EXENAME}_v${PREVIOUS_VER}.zip 2>/dev/null; true
-	# @aws s3 cp $(PUBLISHPATH)/${EXENAME}.zip s3://mepl-goapps/${EXENAME}.zip		#upload latest file to s3
-	@echo "Zip package [${APP_VER}] deployed to s3 bucket"
+	@echo "Zip package [${APP_VER}] ready to deploy to production"
 
 
 
@@ -105,26 +98,7 @@ deploy-prod: --release --prepfiles-for-package
 deploy-prod-replace: --release-replace --prepfiles-for-package
 	# create zip file
 	@7z a $(PUBLISHPATH)/${EXENAME}.zip $(PUBLISHPATH)/$(EXENAME) $(PUBLISHPATH)/conf.prod.json $(PUBLISHPATH)/*.list
-	@echo Uploading...
-	@aws s3 rm s3://mepl-goapps/${EXENAME}.zip
-	#upload latest file to s3s
-	@aws s3 cp $(PUBLISHPATH)/${EXENAME}.zip s3://mepl-goapps/${EXENAME}.zip
-	@echo "Zip package [${APP_VER}] replaced at s3 bucket"
-
-
-
-# .PHONY: push-on-prod-servers
-# ## push-on-prod-servers: ssh to each server and pull latest binaries from s3
-# push-on-prod-servers:
-# 	@sh $(SCRIPTPATH)/aws-push.sh "${EXENAME}"
-
-
-
-.PHONY: deploy-git
-## deploy-git: create new tag in git with current version number
-deploy-git:
-	@bash ~/scripts/new-release-tag.sh ${APP_VER}
-
+	@echo "Replacement package ready to deploy to production"
 	
 
 .PHONY: gen-sql

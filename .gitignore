@@ -34,3 +34,4 @@ secured
 log*
 tool
 tools
+*.self
