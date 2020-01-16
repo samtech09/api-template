@@ -23,7 +23,7 @@ fi
 git clone https://github.com/samtech09/api-template.git
 
 # find given file type in current folder and all sub folders
-for f in $(find -iname "*.go")
+for f in $(find api-template/ -iname "*.go")
 do 
 	#echo Processing $f
 	# find and replace text
@@ -31,14 +31,15 @@ do
 done
 
 #mod file
-sed -i "s/github.com\/samtech09\/api-template/${1}/g" "go.mod"
+sed -i "s/github.com\/samtech09\/api-template/${1}/g" "api-template/go.mod"
 
 #replace in Makefile
 pname=`basename ${1}`
 sed -i "s/api-template/${pname}/g" "api-template/Makefile"
 
 #delete .git folder & rename
-rm -r api-template/.git
+rm -rf api-template/.git
+rm -rf api-template/scripts
 mv api-template "${pname}"
 
 echo "Done. Project '${pname}' is ready for development."
