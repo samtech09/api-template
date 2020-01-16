@@ -32,10 +32,11 @@ done
 
 #replace in Makefile
 pname=`basename ${1}`
-sed -i "s/api-template/${pname}/g" "Makefile"
+sed -i "s/api-template/${pname}/g" "api-template/Makefile"
 
-#delete .git folder
-rm -r .git
+#delete .git folder & rename
+rm -r api-template/.git
+mv api-template "${pname}"
 
 echo "Done. Project '${pname}' is ready for development."
 echo
