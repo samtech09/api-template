@@ -113,6 +113,7 @@ github.com/samtech09/apitestengine v0.0.0-20200108132032-c1f4ae23280e h1:d7guu+M
 github.com/samtech09/apitestengine v0.0.0-20200108132032-c1f4ae23280e/go.mod h1:AVI7mdYkYyfpd7Ejjq/GH9OOPfIXNmj9mDqIkLswB3I=
 github.com/samtech09/gosql v1.0.1 h1:K/5WTyCJuHOfpLenEPW6L6V4H+HoCpkDVltIlfmVXNo=
 github.com/samtech09/gosql v1.0.1/go.mod h1:2OoKAG5iSsyfRW9x7rOPLhftQArn2O1DGXj8a/4vJvk=
+github.com/samtech09/gosql v1.0.3/go.mod h1:2OoKAG5iSsyfRW9x7rOPLhftQArn2O1DGXj8a/4vJvk=
 github.com/samtech09/jwtauth v1.0.0 h1:LC0LZpWUbzDtx2bFO0PCSAEDswDww6MUI5jf/PcBCNc=
 github.com/samtech09/jwtauth v1.0.0/go.mod h1:HufQOAGQK4VTV4o4QMVWKQtBiy7SrUAglh5nWZ+SrJA=
 github.com/samtech09/redicache v1.0.0 h1:oUxce112+sh7TpIulHvQ9tK93c/HAVkEwPin8zIaZ00=

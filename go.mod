@@ -12,7 +12,7 @@ require (
 	github.com/samtech09/apiclient v1.0.0
 	github.com/samtech09/apiroutecache v1.0.0
 	github.com/samtech09/apitestengine v0.0.0-20200108132032-c1f4ae23280e
-	github.com/samtech09/gosql v1.0.1
+	github.com/samtech09/gosql v1.0.3
 	github.com/samtech09/jwtauth v1.0.0
 	github.com/samtech09/redicache v1.0.0
 	golang.org/x/crypto v0.0.0-20200115085410-6d4e4cb37c7d // indirect
