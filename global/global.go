@@ -4,6 +4,7 @@ import (
 	"net"
 
 	"github.com/rs/zerolog"
+	"github.com/samtech09/api-template/mango"
 	"github.com/samtech09/api-template/psql"
 	"github.com/samtech09/apiclient"
 	"github.com/samtech09/apiroutecache"
@@ -15,7 +16,8 @@ var (
 	Api       apiclient.API
 	Logger    *zerolog.Logger
 	Db        *psql.Db
-	Mgosesion *apiroutecache.MongoSession
+	Routes    *apiroutecache.MongoSession
+	Mgosesion *mango.MongoSession
 	JWTval    *jwtauth.Validator
 	Cache     *redicache.RedisSession
 	Config    appConfig
@@ -72,8 +74,11 @@ type appConfig struct {
 	//  Only used for data-sync (refresh routes)
 	AuthSrv authserver
 
-	//MongoDB config
-	Mongo apiroutecache.MongoConfig
+	//RouteDb is API route cache in mongodb
+	RouteDb apiroutecache.MongoConfig
+
+	//Mongo is config for MongoDb
+	Mongo mango.MongoConfig
 
 	//redis cache
 	Redis redicache.RedisConfig

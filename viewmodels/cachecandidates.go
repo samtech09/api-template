@@ -3,12 +3,21 @@ package viewmodels
 import (
 	"time"
 
-	g "github.com/samtech09/api-template/global"
+	"github.com/samtech09/redicache"
 )
+
+var _defExpirationInMinutes int
+var _cache *redicache.RedisSession
+
+//SetCacheSession set session object where cache items could be added
+func SetCacheSession(expinminute int, c *redicache.RedisSession) {
+	_defExpirationInMinutes = expinminute
+	_cache = c
+}
 
 //RegisterModelsForCaching register models to be cached in Redis Cache
 func RegisterModelsForCaching() {
-	g.Cache.RegisterCandidate(DbUser{}, "Sample cache candidate to show usage")
+	_cache.RegisterCandidate(DbUser{}, "Sample cache candidate to show usage")
 
 	// register more candidates ...
 }
@@ -31,5 +40,5 @@ func (s DbUser) GetMasterKey() string {
 
 //GetExpiration returns expiration duration of key
 func (s DbUser) GetExpiration() time.Duration {
-	return time.Minute * time.Duration(g.Config.Redis.ExpirationInMinute)
+	return time.Minute * time.Duration(_defExpirationInMinutes)
 }

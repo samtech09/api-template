@@ -4,12 +4,6 @@ import (
 	"encoding/json"
 )
 
-//DbUser is sample database user
-type DbUser struct {
-	ID   int
-	Name string
-}
-
 //ListItem is used to allow get the value form common query or procedure which extract id , title etc.
 type ListItem struct {
 	ID       int    `json:",omitempty"`

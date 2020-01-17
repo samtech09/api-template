@@ -55,42 +55,15 @@ func (t *User) SetRoutes() http.Handler {
 
 //Listusers will list all users
 func (t *User) Listusers(w http.ResponseWriter, r *http.Request) {
-	//get list of users
-	stmt := sqls.UserListAll()
 
-	// request will be cancelled after 10 seconds if takes more than 10 sec to execute
-	ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
-	defer cancel()
-
-	rows, err := g.Db.Conn(stmt.ReadOnly).Query(ctx, stmt.SQL)
+	u := viewmodels.DbUser{}
+	res, err := u.Cache(g.Mgosesion).GetAll()
 	if err != nil {
 		t.Error500(w, err.Error(), "user.ListUsers")
 		return
 	}
-	// make sure to always close rows
-	defer rows.Close()
 
-	var list []viewmodels.DbUser
-	count := 0
-	isfirst := true
-	for rows.Next() {
-		// scan rows to struct
-		u := viewmodels.DbUser{}
-		err := rows.Scan(&u.ID, &u.Name, &count)
-		if err != nil {
-			t.Error500(w, err.Error(), "user.ListUsers")
-			return
-		}
-
-		if isfirst {
-			isfirst = false
-			// instead of append, make slice of fixed length to avoid reallocations
-			list = make([]viewmodels.DbUser, 0, count)
-		}
-		list = append(list, u)
-	}
-
-	t.JSON(w, list)
+	t.JSON(w, res)
 }
 
 //Createuser will create new user in database

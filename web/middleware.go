@@ -75,7 +75,7 @@ func AuthRequired() func(next http.Handler) http.Handler {
 			// }
 
 			//Check client's granted scopes has access to this route
-			scopes, err := g.Mgosesion.GetScopesFromRoute(controller, endpoint, method)
+			scopes, err := g.Routes.GetScopesFromRoute(controller, endpoint, method)
 			if (err != nil) || (len(*scopes) < 1) {
 				// failed to get scope for given route
 				w.WriteHeader(http.StatusNotFound)

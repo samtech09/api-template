@@ -9,6 +9,7 @@ import (
 
 	g "github.com/samtech09/api-template/global"
 	"github.com/samtech09/api-template/internal/logger"
+	"github.com/samtech09/api-template/mango"
 	"github.com/samtech09/api-template/psql"
 	"github.com/samtech09/api-template/sqls"
 	"github.com/samtech09/api-template/viewmodels"
@@ -72,12 +73,18 @@ func InitServices(appDir string) {
 	//
 	// inititalize route cache
 	//
-	g.Mgosesion = apiroutecache.InitSession(g.Config.Mongo)
+	g.Routes = apiroutecache.InitSession(g.Config.RouteDb)
+
+	//
+	// inititalize mongodb for application use
+	//
+	g.Mgosesion = mango.InitSession(g.Config.Mongo)
 
 	//
 	// inititalize data cache
 	//
 	g.Cache = redicache.InitSession(g.Config.Redis)
+	viewmodels.SetCacheSession(g.Config.Redis.ExpirationInMinute, g.Cache)
 
 	//
 	// initialize JWT Validator
@@ -160,6 +167,7 @@ func InitLogger(appDir string) {
 
 //AppCleanup cleanup existing connections and sessions
 func AppCleanup() {
+	g.Routes.Cleanup()
 	g.Mgosesion.Cleanup()
 	g.Logger.Info().Msg("Shutting down...")
 	logFile.Sync()
