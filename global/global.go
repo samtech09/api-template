@@ -4,10 +4,10 @@ import (
 	"net"
 
 	"github.com/rs/zerolog"
-	"github.com/samtech09/api-template/mango"
-	"github.com/samtech09/api-template/psql"
 	"github.com/samtech09/apiclient"
 	"github.com/samtech09/apiroutecache"
+	"github.com/samtech09/dbtools/mango"
+	"github.com/samtech09/dbtools/pgsql"
 	"github.com/samtech09/jwtauth"
 	"github.com/samtech09/redicache"
 )
@@ -15,7 +15,7 @@ import (
 var (
 	Api       apiclient.API
 	Logger    *zerolog.Logger
-	Db        *psql.Db
+	Db        *pgsql.DB
 	Routes    *apiroutecache.MongoSession
 	Mgosesion *mango.MongoSession
 	JWTval    *jwtauth.Validator
@@ -62,10 +62,10 @@ type appConfig struct {
 	SSLKeyFile string
 
 	//database config for Read-only database
-	DBReader psql.PDbConfig
+	DBReader pgsql.DbConfig
 
 	//database config for Read-write database
-	DBWriter psql.PDbConfig
+	DBWriter pgsql.DbConfig
 
 	//ExtApiBaseUrl is base URL of external API (if any required)
 	ExtApiBaseUrl string

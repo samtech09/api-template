@@ -9,12 +9,12 @@ import (
 
 	g "github.com/samtech09/api-template/global"
 	"github.com/samtech09/api-template/internal/logger"
-	"github.com/samtech09/api-template/mango"
-	"github.com/samtech09/api-template/psql"
 	"github.com/samtech09/api-template/sqls"
 	"github.com/samtech09/api-template/viewmodels"
 	"github.com/samtech09/apiclient"
 	"github.com/samtech09/apiroutecache"
+	"github.com/samtech09/dbtools/mango"
+	"github.com/samtech09/dbtools/pgsql"
 	"github.com/samtech09/jwtauth"
 	"github.com/samtech09/redicache"
 )
@@ -103,7 +103,8 @@ func InitServices(appDir string) {
 	// ----------------------
 	// Initialize db connections
 	//
-	g.Db = psql.InitDbPool(g.Config.DBReader, g.Config.DBWriter, *g.Logger)
+	g.Db = pgsql.InitDbPool(g.Config.DBReader, g.Config.DBWriter)
+	//g.Db.SetLogger(*g.Logger)
 
 	//
 	// setup models for caching

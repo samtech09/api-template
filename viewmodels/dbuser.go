@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/samtech09/api-template/mango"
+	"github.com/samtech09/dbtools/mango"
 	"go.mongodb.org/mongo-driver/mongo"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -27,11 +27,19 @@ func (d DbUser) GetID() interface{} {
 	return d.ID
 }
 
+func (c *dbUserCache) toInterface(list []DbUser) []interface{} {
+	var islice []interface{} = make([]interface{}, len(list))
+	for i, v := range list {
+		islice[i] = v
+	}
+	return islice
+}
+
 //Cache returns mongodb collection for Dbuser
-func (c *DbUser) Cache(m *mango.MongoSession) *dbUserCache {
+func (d *DbUser) Cache(m *mango.MongoSession) *dbUserCache {
 	colname := "dbusers"
-	d := dbUserCache{m, m.GetColl(colname), colname}
-	return &d
+	cac := dbUserCache{m, m.GetColl(colname), colname}
+	return &cac
 }
 
 //GetAll returns all documents from given collection
@@ -70,7 +78,8 @@ func (c *dbUserCache) InsertBulk(data ...DbUser) error {
 	if data == nil {
 		return fmt.Errorf("nothing to save")
 	}
-	return c.m.InsertBulk(c.c, data)
+	is := c.toInterface(data)
+	return c.m.InsertBulk(c.c, is)
 }
 
 //Upsert insert or update single document by ID
