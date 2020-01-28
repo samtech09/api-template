@@ -1,5 +1,5 @@
 # api-template
-api-template is MVC template to create micrososervices with postgres as backend database.
+api-template is MVC template to create micrososervices with postgres / mssql as backend database. Redis and mongodb client also added.
 
 
 ## Making new project from template
@@ -12,5 +12,8 @@ curl -s https://raw.githubusercontent.com/samtech09/api-template/master/scripts/
 
 ## Technologies used
 - [Chi router](https://github.com/go-chi/chi) for request routing
-- [pgx](https://github.com/jackc/pgx) and [pgxpool](https://github.com/jackc/pgx/v4/pgxpool) for connection to PostgreSQL
-- [zerolog](https://github.com/rs/zerolog) for logging
+- [dbtools/mssql](https://github.com/samtech09/dbtools) for SQL-Server database handling
+- [dbtools/pgsql](https://github.com/samtech09/dbtools) for PostgreSQL database handling
+- [dbtools/mango](https://github.com/samtech09/dbtools) for working with MongoDB
+- [redicache](https://github.com/samtech09/redicache) for connection to Redis server
+- [gosql](https://github.com/samtech09/gosql) for generating SQLs with design-time preview/details
